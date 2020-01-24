@@ -78,7 +78,7 @@ RUN --mount=target=. \
   echo "-X ${PKG}/version.Version=${VERSION} -X ${PKG}/version.Revision=${REVISION} -X ${PKG}/version.Package=${PKG}" | tee /tmp/.ldflags; \
   echo -n "${VERSION}" | tee /tmp/.version;
 
-# build buildctl binary 
+# build buildctl binary
 FROM buildkit-base AS buildctl
 ENV CGO_ENABLED=0
 ARG TARGETPLATFORM
@@ -211,7 +211,7 @@ RUN curl -Ls https://github.com/containernetworking/plugins/releases/download/$C
 
 FROM buildkit-base AS integration-tests-base
 ENV BUILDKIT_INTEGRATION_ROOTLESS_IDPAIR="1000:1000"
-RUN apt-get install -y --no-install-recommends uidmap sudo vim iptables \ 
+RUN apt-get install -y --no-install-recommends uidmap sudo vim iptables \
   && useradd --create-home --home-dir /home/user --uid 1000 -s /bin/sh user \
   && echo "XDG_RUNTIME_DIR=/run/user/1000; export XDG_RUNTIME_DIR" >> /home/user/.profile \
   && mkdir -m 0700 -p /run/user/1000 \
@@ -255,7 +255,7 @@ RUN apk add --no-cache git
 COPY --from=idmap /usr/bin/newuidmap /usr/bin/newuidmap
 COPY --from=idmap /usr/bin/newgidmap /usr/bin/newgidmap
 RUN chmod u+s /usr/bin/newuidmap /usr/bin/newgidmap \
-  && adduser -D -u 1000 user \
+  && adduser -D -u 1000540001 user \
   && mkdir -p /run/user/1000 /home/user/.local/tmp /home/user/.local/share/buildkit \
   && chown -R user /run/user/1000 /home/user \
   && echo user:100000:65536 | tee /etc/subuid | tee /etc/subgid \
@@ -285,5 +285,3 @@ ENTRYPOINT ["rootlesskit", "buildkitd"]
 
 
 FROM buildkit-${BUILDKIT_TARGET}
-
-
